@@ -5,8 +5,8 @@ import { FindProductsByCategoryService } from '../service/find-produtcs-by-categ
 export class FindProductsByCategoryController {
     constructor(private readonly findProductsByCategoryService: FindProductsByCategoryService){}
 
-    @Get()
-    findAll(): string {
-        return this.findProductsByCategoryService.getFindAll()
-    }   
+    @Get(':categoryId')
+    async findProductsByCategory(categoryId: number) {
+        return this.findProductsByCategoryService.findProductsByCategory(categoryId);
+    }
 }

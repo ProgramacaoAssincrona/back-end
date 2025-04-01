@@ -6,11 +6,13 @@ export class FindProductsByCategoryService {
     constructor(private readonly prisma: PrismaService) {}
 
     async findProductsByCategory(categoryId: number): Promise<any> {
-        const produtos = this.prisma.produtos.findMany({
+        const produtos = await this.prisma.products.findMany({
             where: {
-                categoria_id: categoryId
+                category_id: categoryId,
             }
         });
+
+        console.log(produtos)
 
         if (!(await produtos).length)
             throw new NotFoundException('Produtos não encontrados');

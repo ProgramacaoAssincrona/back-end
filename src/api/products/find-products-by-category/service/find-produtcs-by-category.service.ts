@@ -5,10 +5,10 @@ import { PrismaService } from "src/prisma/prisma.service";
 export class FindProductsByCategoryService {
     constructor(private readonly prisma: PrismaService) {}
 
-    async findProductsByCategory(categoryId: number): Promise<any> {
+    async findProductsByCategory(categoryId: string): Promise<any> {
         const produtos = await this.prisma.products.findMany({
             where: {
-                category_id: categoryId,
+                category_id: Number(categoryId),
             }
         });
 

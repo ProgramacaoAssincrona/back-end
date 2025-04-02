@@ -12,8 +12,6 @@ export class FindProductsByCategoryService {
             }
         });
 
-        console.log(produtos)
-
         if (!(await produtos).length)
             throw new NotFoundException('Produtos não encontrados');
 

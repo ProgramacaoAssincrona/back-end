@@ -7,60 +7,68 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model cart {
-  id         Int       @id @default(autoincrement())
-  user_id    Int?
-  product_id Int?
-  quantity   Int       @default(1)
-  products   products? @relation(fields: [product_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  users      users?    @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+model avaliacoes {
+  id             Int       @id @default(autoincrement())
+  produto_id     Int?
+  usuario_id     Int?
+  comentario     String?
+  avaliacao      Int?
+  data_avaliacao DateTime? @default(now()) @db.Timestamp(6)
+  produtos       produtos? @relation(fields: [produto_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  usuarios       usuarios? @relation(fields: [usuario_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
 }
 
-model categories {
+model categorias {
   id       Int        @id @default(autoincrement())
-  name     String     @db.VarChar(100)
-  products products[]
+  nome     String     @db.VarChar(100)
+  img_url  Bytes
+  produtos produtos[]
 }
 
-model order_items {
-  id         Int       @id @default(autoincrement())
-  order_id   Int?
-  product_id Int?
-  quantity   Int
-  price      Decimal   @db.Decimal(10, 2)
-  orders     orders?   @relation(fields: [order_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  products   products? @relation(fields: [product_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+model itens_pedido {
+  id             Int       @id @default(autoincrement())
+  pedido_id      Int?
+  produto_id     Int?
+  quantidade     Int
+  preco_unitario Decimal   @db.Decimal(10, 2)
+  pedidos        pedidos?  @relation(fields: [pedido_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  produtos       produtos? @relation(fields: [produto_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
 }
 
-model orders {
-  id          Int           @id @default(autoincrement())
-  user_id     Int?
-  total_price Decimal       @db.Decimal(10, 2)
-  status      String?       @default("Pendente") @db.VarChar(50)
-  created_at  DateTime?     @default(now()) @db.Timestamp(6)
-  order_items order_items[]
-  users       users?        @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+model pedidos {
+  id           Int            @id @default(autoincrement())
+  usuario_id   Int?
+  data_pedido  DateTime?      @default(now()) @db.Timestamp(6)
+  status       String?        @db.VarChar(50)
+  total        Decimal        @db.Decimal(10, 2)
+  itens_pedido itens_pedido[]
+  usuarios     usuarios?      @relation(fields: [usuario_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
 }
 
-model products {
-  id          Int           @id @default(autoincrement())
-  name        String        @db.VarChar(255)
-  description String?
-  price       Decimal       @db.Decimal(10, 2)
-  stock       Int           @default(0)
-  category_id Int?
-  image_url   String?
-  cart        cart[]
-  order_items order_items[]
-  categories  categories?   @relation(fields: [category_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+model produtos {
+  id                Int            @id @default(autoincrement())
+  nome              String         @db.VarChar(255)
+  descricao         String?
+  preco             Decimal        @db.Decimal(10, 2)
+  preco_promocional Decimal?       @db.Decimal(10, 2)
+  imagem_url        String?
+  categoria_id      Int?
+  avaliacoes        avaliacoes[]
+  itens_pedido      itens_pedido[]
+  categorias        categorias?    @relation(fields: [categoria_id], references: [id], onUpdate: NoAction)
 }
 
-model users {
-  id         Int       @id @default(autoincrement())
-  name       String    @db.VarChar(100)
-  email      String    @unique @db.VarChar(100)
-  password   String    @db.VarChar(255)
-  created_at DateTime? @default(now()) @db.Timestamp(6)
-  cart       cart[]
-  orders     orders[]
+model usuarios {
+  id           Int          @id @default(autoincrement())
+  nome         String       @db.VarChar(255)
+  email        String       @unique @db.VarChar(255)
+  senha        String       @db.VarChar(255)
+  endereco     String?
+  telefone     String?      @db.VarChar(20)
+  data_criacao DateTime?    @default(now()) @db.Timestamp(6)
+  avaliacoes   avaliacoes[]
+  pedidos      pedidos[]
 }

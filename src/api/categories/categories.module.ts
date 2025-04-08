@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common';
-import { FindManyCategoriesModule } from './find-many-categories/find-many-products.module';
+import { FindManyCategoriesModule } from './get-all-categories/get-all-categories.module';
 
 @Module({
     imports: [FindManyCategoriesModule],

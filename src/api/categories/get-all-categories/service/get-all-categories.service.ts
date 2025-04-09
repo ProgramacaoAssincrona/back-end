@@ -6,7 +6,7 @@ export class GetAllCategoriesService {
     constructor(private readonly prisma: PrismaService) {}
 
     async getAllCategories(): Promise<any> {
-        const categorias = await this.prisma.categorias.findMany();
+        const categorias = await this.prisma.categories.findMany();
 
         if (!(await categorias).length)
             throw new NotFoundException('Categorias não encontradas');

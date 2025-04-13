@@ -19,8 +19,7 @@ export class FindProductsService {
     
             if (!(await produtos).length)
                 throw new NotFoundException('Produtos não encontrados');
-    
-            console.log(produtos);
+
             return produtos;
         }
     }

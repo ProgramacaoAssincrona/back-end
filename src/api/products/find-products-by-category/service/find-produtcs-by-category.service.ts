@@ -9,7 +9,23 @@ export class FindProductsByCategoryService {
         const produtos = await this.prisma.products.findMany({
             where: {
                 category_id: Number(categoryId)
-            }
+            },
+            select: {
+                id: true,
+                name: true,
+                description: true,
+                price: true,
+                promotional_price: true,
+                image_url: true,
+                stars: true,
+                num_evaluate: true,
+                categories: {
+                    select: {
+                        id: true,
+                        name: true,
+                    },
+                },
+            },
         });
 
         if (!(await produtos).length)

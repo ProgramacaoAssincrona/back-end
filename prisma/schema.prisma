@@ -44,6 +44,8 @@ model products {
   promotional_price Decimal?      @db.Decimal(10, 2)
   image_url         String?
   category_id       Int?
+  stars             Int?          @db.SmallInt
+  num_evaluate      Int?
   order_items       order_items[]
   categories        categories?   @relation(fields: [category_id], references: [id], onUpdate: NoAction)
   reviews           reviews[]
